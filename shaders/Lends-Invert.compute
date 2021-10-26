@@ -1,0 +1,26 @@
+#pragma kernel CSMain
+
+// Input
+Texture2D<float4> Texture;
+// Output
+RWTexture2D<float4> Result;
+// Center of lends effect the unit must be the same as the input texture.
+float2 center;
+// Radius of lends effect
+float R;
+
+#define PI 3.14159265359
+
+[numthreads(8, 8, 1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float2 diff = id.xy - center;
+    float r2 = diff.x * diff.x + diff.y * diff.y;
+    float r = sqrt(r2);
+    if (r < R) {
+      float4 c = Texture[cos(r * PI / 2 / R) * diff  + id.xy];
+      Result[id.xy] = float4(float3(1, 1, 1) - c.xyz, 1);
+    } else {
+      Result[id.xy] = Texture[id.xy];
+    }
+}
