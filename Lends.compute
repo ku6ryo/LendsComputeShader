@@ -1,16 +1,17 @@
 #pragma kernel CSMain
 
+// Input
 Texture2D<float4> Texture;
+// Output
 RWTexture2D<float4> Result;
+// Center of lends effect the unit must be the same as the input texture.
 float2 center;
-// Input texture width and height
-float width;
-float height;
+// Radius of lends effect
+float R;
 
 #define PI 3.14159265359
-#define R 300
 
-[numthreads(8,8,1)]
+[numthreads(8, 8, 1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     float2 diff = id.xy - center;
